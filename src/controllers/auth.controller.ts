@@ -1,5 +1,6 @@
 import { Request, Response } from 'express';
 import * as Yup from 'yup';
+import { IReqUser } from '../middlewares/auth.middleware';
 import UserModel from '../models/user.model';
 import { encrypt } from '../utils/encryption';
 import { generateToken } from '../utils/jwt';
@@ -86,7 +87,7 @@ export default {
       });
 
       if (!userByIdentifier) {
-        return res.status(403).json({
+        return res.status(404).json({
           message: 'User not found. Please check your email or username',
           data: null,
         });
@@ -96,7 +97,7 @@ export default {
         encrypt(password) === userByIdentifier.password;
 
       if (!validatePassword) {
-        return res.status(403).json({
+        return res.status(401).json({
           message: 'Wrong password',
           data: null,
         });
@@ -120,7 +121,27 @@ export default {
     }
   },
 
-  async me(req: Request, res: Response) {
-    // req.user
+  async me(req: IReqUser, res: Response) {
+    try {
+      const user = req.user;
+      const result = await UserModel.findById(user?.id);
+
+      if (!result) {
+        return res.status(404).json({
+          message: 'User not found',
+          data: null,
+        });
+      }
+      return res.status(200).json({
+        message: 'Success get user profile',
+        data: result,
+      });
+    } catch (error) {
+      const err = error as unknown as Error;
+      return res.status(400).json({
+        message: err.message,
+        data: null,
+      });
+    }
   },
 };

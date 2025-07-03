@@ -1,4 +1,4 @@
-import jwt from 'jsonwebtoken';
+import jwt, { JsonWebTokenError } from 'jsonwebtoken';
 import { Types } from 'mongoose';
 import { IUser } from '../models/user.model';
 import { SECRET_KEY_JWT } from './env';
@@ -17,12 +17,17 @@ export interface IUserToken
   id?: Types.ObjectId;
 }
 
-export const generateToken = (user: IUserToken) => {
+export const generateToken = (user: IUserToken): string => {
   const token = jwt.sign(user, SECRET_KEY_JWT, { expiresIn: '1h' });
   return token;
 };
 
 export const getUserData = (token: string) => {
-  const user = jwt.verify(token, SECRET_KEY_JWT) as IUserToken;
-  return user;
+  try {
+    const user = jwt.verify(token, SECRET_KEY_JWT) as IUserToken;
+    return { user: user, error: null };
+  } catch (error) {
+    const err = error as Error as JsonWebTokenError;
+    return { user: null, error: err };
+  }
 };
