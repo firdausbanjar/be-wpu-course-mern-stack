@@ -1,5 +1,5 @@
 import bodyParser from 'body-parser';
-import express from 'express';
+import express, { Request, Response } from 'express';
 import router from './routes/api';
 import db from './utils/database';
 
@@ -14,6 +14,13 @@ const init = async () => {
 
     app.use(bodyParser.json());
     app.use('/api', router);
+
+    app.get('/', (req: Request, res: Response) => {
+      return res.status(200).json({
+        message: 'Server is running',
+        data: null,
+      });
+    });
 
     app.listen(PORT, () => {
       console.log(`Server is running on port http://localhost:${PORT}`);
