@@ -36,6 +36,7 @@ const doc = {
 };
 
 swaggerAutogen({ openapi: '3.0.0' })(outputFile, endpointFiles, doc);
+
 // penulisan swaggerAutogen sama seperti dibawah ini
 // const generateSwagger = swaggerAutogen({ openapi: '3.0.0' })
 // generateSwagger(outputFile, endpointFiles, doc)

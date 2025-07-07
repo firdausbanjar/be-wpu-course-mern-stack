@@ -28,7 +28,7 @@ const registerValidateSchema = Yup.object({
     .oneOf([Yup.ref('password')], 'Password not match'),
 });
 
-export default {
+const authController = {
   async register(req: Request, res: Response) {
     try {
       const { fullName, username, email, password, confirmPassword } =
@@ -158,3 +158,5 @@ export default {
     }
   },
 };
+
+export default authController;

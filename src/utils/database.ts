@@ -1,7 +1,7 @@
 import mongoose from 'mongoose';
 import { DATABASE_URL } from './env';
 
-const connect = async () => {
+export default async function connect() {
   try {
     await mongoose.connect(DATABASE_URL, {
       dbName: 'db-wpu-mern-stack',
@@ -12,6 +12,4 @@ const connect = async () => {
     const err = error as unknown as Error;
     return Promise.reject(err.message);
   }
-};
-
-export default connect;
+}

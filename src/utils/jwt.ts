@@ -17,12 +17,12 @@ export interface IUserToken
   id?: Types.ObjectId;
 }
 
-export const generateToken = (user: IUserToken): string => {
+export function generateToken(user: IUserToken): string {
   const token = jwt.sign(user, SECRET_KEY_JWT, { expiresIn: '1h' });
   return token;
-};
+}
 
-export const getUserData = (token: string) => {
+export function getUserData(token: string) {
   try {
     const user = jwt.verify(token, SECRET_KEY_JWT) as IUserToken;
     return { user: user, error: null };
@@ -30,4 +30,4 @@ export const getUserData = (token: string) => {
     const err = error as Error as JsonWebTokenError;
     return { user: null, error: err };
   }
-};
+}

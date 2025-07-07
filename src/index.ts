@@ -5,7 +5,7 @@ import docs from './docs/route';
 import router from './routes/api';
 import db from './utils/database';
 
-const init = async () => {
+async function init() {
   try {
     const result = await db();
     console.log(`Database status: ${result}`);
@@ -32,6 +32,6 @@ const init = async () => {
   } catch (error) {
     console.log(error);
   }
-};
+}
 
 init();
